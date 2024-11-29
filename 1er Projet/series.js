@@ -23,7 +23,7 @@ navWrapper .addEventListener("click" , closeNav)
 //clé api c18a944fa153e0a4327a36d2b9ea020d
 // création du l'url genre
 const baseUrl = `https://api.themoviedb.org/3`;
-const genreUrl = `/genre/movie/list?language=fr`;
+const genreUrl = `/genre/tv/list?language=en`;
 
 const genreLien = `${baseUrl}${genreUrl}`;
 
@@ -37,7 +37,7 @@ const options = {
 
 
 
-async function afficherGenre() {
+  async function afficherGenre() {
 
     const response = await fetch(genreLien, options);
     const genre = await response.json();
@@ -47,9 +47,13 @@ async function afficherGenre() {
     for (let i = 0; i < genres.length; i++) {
     
         const sectionCategories = document.querySelector(".categories");
-        const categoriesElement = document.createElement("a");
+        const categoriesElement = document.createElement("button");
+        categoriesElement.classList.add("genreButton");
+        categoriesElement.id = genres[i].id;
         categoriesElement.innerText = genres[i].name;
-        
+        categoriesElement.addEventListener("click", (event)=> {
+            afficherSeriesParGenre(event.target.id, genres[i].name);
+        })
         
         sectionCategories.appendChild(categoriesElement);
     
@@ -69,7 +73,7 @@ async function afficherImage (size, imgUrl) {
 
 
 // afficher les séries du moment
-const serieUrl = `/tv/airing_today?language=fr`
+const serieUrl = `/tv/top_rated?language=fr`
 
 const serieLien = `${baseUrl}${serieUrl}`
 
@@ -121,6 +125,49 @@ button.addEventListener("click", async () => {
     page++;
     afficherPage(page);
 })
+
+
+
+// afficher les films selon les genres
+async function afficherSeriesParGenre(genreId, genreName) {
+
+    document.querySelector(".affiches").innerHTML = "";
+
+    button.innerHTML = `Voir plus de séries de type : ${genreName}`;
+
+    for (page = 1; page < 300; page ++) {
+
+        const response = await fetch(`https://api.themoviedb.org/3/tv/airing_today?language=fr&page=${page}`, options);
+        const now = await response.json();
+        const nowPlaying = now.results;
+        console.log(nowPlaying);
+    
+    
+        const filmParGenre = nowPlaying.filter((film) => {
+
+            return film.genre_ids.includes(parseInt(genreId));
+        })
+    
+        for (let i = 0; i < filmParGenre.length; i++) {
+
+            const sectionAffiches = document.querySelector(".affiches");
+            const affichesElement = document.createElement("img");
+            affichesElement.src = (await afficherImage("w200", filmParGenre[i].poster_path)).url;
+
+            sectionAffiches.appendChild(affichesElement);
+
+            const image = document.querySelectorAll("img")
+            if (image.length > 19) {
+            break;
+            }
+        }
+        
+        const image = document.querySelectorAll("img")
+        if (image.length > 19) {
+            break;
+        }
+    }
+}
 
 
 

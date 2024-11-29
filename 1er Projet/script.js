@@ -52,7 +52,7 @@ async function afficherGenre() {
         categoriesElement.id = genres[i].id;
         categoriesElement.innerText = genres[i].name;
         categoriesElement.addEventListener("click", (event)=> {
-            afficherFilmsParGenre(event.target.id);
+            afficherFilmsParGenre(event.target.id, genres[i].name);
         })
         
         sectionCategories.appendChild(categoriesElement);
@@ -124,28 +124,53 @@ const button = document.getElementById("voirPlusDeFilms");
 button.addEventListener("click", async () => {
     page++;
     afficherPage(page);
+
 })
 
 
 
 
 // afficher les films selon les genres
-async function afficherFilmsParGenre(genreId) {
-    const response = await fetch(NowLien, options);
-    const now = await response.json();
-    const nowPlaying = now.results;
+async function afficherFilmsParGenre(genreId, genreName) {
+
+    document.querySelector(".affiches").innerHTML = "";
+
+    button.innerHTML = `Voir plus de films de type : ${genreName}`;
+
+    for (page = 1; page < 300; page ++) {
+
+        const response = await fetch(`https://api.themoviedb.org/3/movie/now_playing?language=fr&page=${page}`, options);
+        const now = await response.json();
+        const nowPlaying = now.results;
     
+        const filmParGenre = nowPlaying.filter((film) => {
 
+            return film.genre_ids.includes(parseInt(genreId));
+        })
+        
+        for (let i = 0; i < filmParGenre.length; i++) {
 
-    for (let i = 0; i < nowPlaying.length; i++) {
+            const sectionAffiches = document.querySelector(".affiches");
+            const affichesElement = document.createElement("img");
+            affichesElement.src = (await afficherImage("w200", filmParGenre[i].poster_path)).url;
+                
+            sectionAffiches.appendChild(affichesElement);
 
-        const sectionAffiches = document.querySelector(".affiches");
-        const affichesElement = document.createElement("img");
-        affichesElement.src = (await afficherImage("w200", nowPlaying[i].poster_path)).url;
+            const image = document.querySelectorAll("img")
+            if (image.length > 19) {
+            break;
+            }
+        }
 
-        sectionAffiches.appendChild(affichesElement);
+        const image = document.querySelectorAll("img")
+        if (image.length > 19) {
+            break;
+        }
+        
     }
+    
 }
+
 
 
 // passer de films à series

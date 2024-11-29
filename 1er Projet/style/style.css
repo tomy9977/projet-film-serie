@@ -13,6 +13,7 @@ body {
     width: 100%;
     position: relative;
     overflow: hidden;
+    background: linear-gradient(white, #bcffbe);
 }  
 
 .categories {
@@ -22,16 +23,48 @@ body {
 }
 
 .categories button {
+    border: none;
+    background-color: rgb(207, 255, 189);
+    border-radius: 10px;
+    padding: 3px;
     margin-right: 25px;
+    margin-bottom: 10px;
     color: black;
-    text-decoration: none;
     font-size: 1.2em;
     cursor: pointer;
 }
 
 .categories button:hover {
     color: rgb(17, 209, 145);
-    text-decoration: underline;
+    text-decoration: none;
+}
+
+#voirPlusDeFilms {
+    border: none;
+    background-color: rgb(169, 255, 138);
+    border-radius: 10px;
+    padding: 5px;
+    color: black;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+#voirPlusDeFilms:hover {
+    color: rgb(17, 209, 145);
+}
+
+#voirPlusDeSeries {
+    border: none;
+    background-color: rgb(169, 255, 138);
+    border-radius: 10px;
+    padding: 5px;
+    color: black;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+#voirPlusDeSeries:hover {
+    color: rgb(17, 209, 145);
 }
 
 .affiches {
